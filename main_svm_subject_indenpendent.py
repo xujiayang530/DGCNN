@@ -100,34 +100,27 @@ def load_eegdata(filePath):
 
     return dataAll, label
 
-def load_de1122(file_path):
-    raw = scio.loadmat(file_path)  #生成字典
-    negDE = raw['negDE']
-    nuDE = raw['nuDE']
-    posDE = raw['posDE']
-
-    negDE = np.transpose(negDE, (1,0,2))
-    nuDE = np.transpose(nuDE, (1,0,2))
-    posDE = np.transpose(posDE, (1,0,2))
+def load_DE_SEED(load_path):
+    filePath = load_path 
+    datasets = scio.loadmat(filePath)
+    DE = datasets['DE']
+    # DE_delta = np.squeeze(DE[:,:,0]).T
+    # DE_theta = np.squeeze(DE[:,:,1]).T
+    # DE_alpha = np.squeeze(DE[:,:,2]).T
+    # DE_beta = np.squeeze(DE[:,:,3]).T
+    # DE_gamma = np.squeeze(DE[:,:,4]).T
+    # dataAll = np.concatenate([DE_delta,DE_theta,DE_alpha,DE_beta,DE_gamma], axis=1)
+    dataAll = np.transpose(DE, [1,0,2])
+    labelAll = datasets['labelAll'].flatten()
     
+    dataAll = np.reshape(dataAll,[dataAll.shape[0],-1])
 
-    data = np.concatenate([posDE,nuDE,negDE], axis=0)
-    label = np.concatenate([np.zeros(posDE.shape[0],),np.zeros(nuDE.shape[0],)+1,np.zeros(negDE.shape[0],)+2],axis=0)
-    label = label.flatten()
+    labelAll = labelAll + 1
 
-    index = np.random.permutation(data.shape[0])
-    data = data[index,:,:]
-    label = label[index]
-
-    # 把trial放到最后面reshape就没有问题
-    data = np.transpose(data, (1,2,0))
-    data = np.reshape(data, (-1, data.shape[2]))
-    data = np.transpose(data, (1,0))
-
-    return data, label
+    return dataAll, labelAll
 
 
-load_path = "E:/数据集汇总/实验室数据/情绪/chazhi/DE_NOGED1122/"
+load_path = "./SEED/SEED_code/DE/session1/"
 
 os.chdir(load_path)
 file_list = os.listdir()
@@ -140,7 +133,7 @@ for sub_i in range(sub_num):
 
     print('subject test>>>', file_list[sub_i])
     # data_test, label_test = load_eegdata('.' + load_path + file_list[sub_i])
-    data_test, label_test = load_de1122(load_path + file_list[sub_i])
+    data_test, label_test = load_DE_SEED(load_path + file_list[sub_i])
 
     train_list = copy.deepcopy(file_list)
     train_list.remove(file_list[sub_i])
@@ -171,7 +164,7 @@ for sub_i in range(sub_num):
 
 
 print('save...')
-scio.savemat('E:/数据集汇总/实验室数据/情绪/chazhi/result/acc_all/acc_DE_NOGED_svm_LOCV.mat',{'acc_all':acc_all,\
+scio.savemat('./result/acc_all/acc_DE_NOGED_svm_LOCV.mat',{'acc_all':acc_all,\
 'sub_list':np.array(file_list,dtype=np.object)})
     
 
