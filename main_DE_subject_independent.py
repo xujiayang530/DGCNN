@@ -92,13 +92,6 @@ def train(train_iter, test_iter, model, criterion, optimizer, num_epochs, sub_na
             #print(optimizer.state_dict)
             optimizer.zero_grad()
 
-            # # 稀疏DGCNN的权重更新有两步，第一步就是反向传播寻找最优，第二步就是稀疏限制，这里进行第二步
-            # lr = optimizer.state_dict()['param_groups'][0]['lr']
-            # # B = model.parameters()
-            # W = model.A.data
-            # W = torch.sign(W) * torch.max(torch.zeros(W.shape[0], W.shape[1]), (W - (1/2) * lam * lr))
-            # model.A.data = W
-
             print('Epoch {}, batch {}, loss: {}, accuracy: {}'.format(ep + 1,
                                                                     batch_id,
                                                                     total_loss / batch_id,
@@ -154,7 +147,7 @@ def evaluate(test_iter, model):
 
 
 def main_LOCV():
-    dir = 'E:/数据集汇总/SEED/SEED_code/DE/session1/'                         #04-0.9916， 0.86    
+    dir = './SEED/SEED_code/DE/session1/'                         #04-0.9916， 0.86    
     # os.chdir(dir) # 可能在寻找子文件的时候路径进了data
     file_list = os.listdir(dir)
     sub_num = len(file_list)
@@ -224,7 +217,7 @@ def main_LOCV():
 
 
     print('save...')
-    scio.savemat('E:/数据集汇总/SEED/DGCNN-main 4.0/result/acc_all/acc_de_SEED_LOCV.mat',{'acc_all':acc_all,\
+    scio.savemat('./result/acc_all/acc_de_SEED_LOCV.mat',{'acc_all':acc_all,\
     'sub_list':np.array(file_list,dtype=np.object)})
 
 
