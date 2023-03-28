@@ -3,9 +3,9 @@
 clear,clc
 
 % 读取数据就是SEED数据集下的ExtractFeatures文件夹，但是需要把文件分出session，分别放在session1 2 3下面
-load_path = 'E:/数据集汇总/SEED/ExtractedFeatures1/session3/';
-save_path = 'E:/数据集汇总/SEED/SEED_code/DE/session3/';
-label_path = 'E:/数据集汇总/SEED/ExtractedFeatures1/label';
+load_path = './SEED/ExtractedFeatures1/session3/';
+save_path = './SEED/SEED_code/DE/session3/';
+label_path = './SEED/ExtractedFeatures1/label';
 load(label_path)
 file_list = dir(load_path);
 file_list(1:2)=[];
